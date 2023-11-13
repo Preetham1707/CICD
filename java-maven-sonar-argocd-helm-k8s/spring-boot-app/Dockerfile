@@ -3,6 +3,7 @@ LABEL MAINTAINER = "preetham"
 
 WORKDIR /var/lib/jenkins/workspace/CICD/java-maven-sonar-argocd-helm-k8s/spring-boot-app
 COPY .  .
+RUN echo "PWD is: $PWD" && ls $PWD
 
 # Compile and package the application to an executable JAR
 RUN mvn -f pom.xml package
