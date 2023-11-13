@@ -1,5 +1,5 @@
-From maven:3.8.1-jdk-11-openj9 as buildImage
-Label MAINTAINER = "preetham"
+FROM maven:3.8.1-jdk-11-openj9 AS buildImage
+LABEL MAINTAINER = "preetham"
 
 WORKDIR CICD/java-maven-sonar-argocd-helm-k8s/spring-boot-app/
 COPY .  /usr/spring-boot-app/
@@ -9,7 +9,7 @@ RUN mvn -f /usr/spring-boot-app/pom.xml package
 
 
 FROM openjdk:11
-Label MAINTAINER = "preetham"
+LABEL MAINTAINER = "preetham"
 ARG JAR_FILE=spring-boot-web.jar
 WORKDIR /opt/app
 EXPOSE 8080
