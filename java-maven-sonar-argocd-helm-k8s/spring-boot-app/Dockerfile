@@ -5,7 +5,7 @@ WORKDIR java-maven-sonar-argocd-helm-k8s/spring-boot-app/
 COPY .  spring-boot-app/
 
 # Compile and package the application to an executable JAR
-RUN mvn -f pom.xml package
+RUN mvn -f spring-boot-app/pom.xml package
 
 
 FROM openjdk:11
