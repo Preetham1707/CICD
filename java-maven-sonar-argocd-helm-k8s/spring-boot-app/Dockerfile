@@ -1,8 +1,8 @@
 FROM maven:3.8.1-jdk-11-openj9 AS buildImage
 LABEL MAINTAINER = "preetham"
 
-WORKDIR /var/lib/jenkins/workspace/CICD/java-maven-sonar-argocd-helm-k8s/spring-boot-app
-COPY .  /usr/spring-boot-app
+WORKDIR /var/lib/jenkins/workspace/CICD/java-maven-sonar-argocd-helm-k8s/spring-boot-app/
+COPY .  /usr/spring-boot-app/
 RUN ls -l /usr/spring-boot-app
 
 # Compile and package the application to an executable JAR
