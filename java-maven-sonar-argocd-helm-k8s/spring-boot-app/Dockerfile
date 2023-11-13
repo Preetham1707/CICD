@@ -2,11 +2,11 @@ FROM maven:3.8.1-jdk-11-openj9 AS buildImage
 LABEL MAINTAINER = "preetham"
 
 WORKDIR /var/lib/jenkins/workspace/CICD/java-maven-sonar-argocd-helm-k8s/spring-boot-app
-COPY .  .
+COPY .  /usr/spring-boot-app
 RUN echo "PWD is: $PWD" && ls $PWD
 
 # Compile and package the application to an executable JAR
-RUN mvn -f pom.xml package
+RUN mvn -f /usr/spring-boot-app/pom.xml package
 
 
 FROM openjdk:11
