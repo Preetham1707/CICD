@@ -3,7 +3,7 @@ LABEL MAINTAINER = "preetham"
 
 WORKDIR /var/lib/jenkins/workspace/CICD/java-maven-sonar-argocd-helm-k8s/spring-boot-app/
 COPY .  /usr/spring-boot-app/
-RUN ls -l /usr/spring-boot-app
+RUN ls -l /usr/spring-boot-app/java-maven-sonar-argocd-helm-k8s/spring-boot-app/
 
 # Compile and package the application to an executable JAR
 RUN mvn -f /usr/spring-boot-app/pom.xml package
