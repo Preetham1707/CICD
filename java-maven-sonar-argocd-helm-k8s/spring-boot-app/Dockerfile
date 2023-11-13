@@ -1,6 +1,7 @@
 FROM maven:3.8.1-jdk-11-openj9 AS buildImage
 LABEL MAINTAINER = "preetham"
 
+RUN cd /java-maven-sonar-argocd-helm-k8s/spring-boot-app
 WORKDIR spring-boot-app/
 COPY .  spring-boot-app/
 RUN ls -l spring-boot-app/
