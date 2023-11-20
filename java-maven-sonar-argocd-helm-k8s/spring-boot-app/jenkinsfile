@@ -1,0 +1,84 @@
+pipeline {
+    agent any
+    tools {
+        maven 'maven'
+    }
+    environment{
+        ACR_NAME ='naruto'
+        IMAGE_NAME= 'springbootapp'
+        TAG = 'latest'
+         DOCKERFILE_PATH='java-maven-sonar-argocd-helm-k8s/spring-boot-app/Dockerfile'
+    }
+
+    stages {
+        stage('GIT checkout') {
+            steps {
+                echo 'Checking out the repository'
+                git branch: 'main', credentialsId: 'Git', url: 'https://github.com/Preetham1707/CICD.git'
+            }
+        }
+        
+        stage('Building Application') {
+            steps {
+                echo 'Building the application using Maven'
+                sh 'ls -ltr'
+                sh 'cd java-maven-sonar-argocd-helm-k8s/spring-boot-app && mvn clean package'
+                
+            }
+        }
+        
+        stage ('CODE ANALYSIS WITH CHECKSTYLE'){
+            steps {
+                sh 'mvn -f java-maven-sonar-argocd-helm-k8s/spring-boot-app checkstyle:checkstyle'
+            }
+            post {
+                success {
+                    echo 'Generated Analysis Result'
+                }
+            }
+        }
+        
+        // stage ('Sonarqube Analysis'){
+        //     environment{
+        //         scannerHome = tool 'sonar'
+        //         SONAR_TOKEN = credentials('Sonartok')
+        //     }
+        //     steps {
+              
+        //         withSonarQubeEnv('SonarQube') {
+        //         sh """ ${scannerHome}/bin/sonar-scanner -X -Dsonar.projectKey=JavaSpringbootApp \
+        //         -Dsonar.login=${SONAR_TOKEN}
+        //         """
+        //         }
+        //     }
+        //     post {
+        //         success {
+        //             echo 'Generated Analysis Result'
+        //         }
+        //     }
+        // }
+        
+        stage('Build Docker Image') {
+            steps {
+                sh 'ls -ltr'
+                script {
+                    // Build Docker image
+                    docker.build("${ACR_NAME}.azurecr.io/${IMAGE_NAME}/${env.BUILD_NUMBER}:${TAG}", "-f ${DOCKERFILE_PATH} .")
+                }
+            }
+        }
+        
+        stage('Publish Docker Image') {
+            steps {
+                script {
+                     // Push Docker image to ACR
+                     
+                    sh 'az acr login --name naruto --username naruto --password 8P1ZLtivGElNMGb7TQwbqkpEZV0Ynim5Vei8E3RYXt+ACRAxVS7J'
+                    sh "docker push ${ACR_NAME}.azurecr.io/${IMAGE_NAME}/${env.BUILD_NUMBER}:${TAG}"
+                    
+                }
+            }
+        }
+        
+    }
+}
